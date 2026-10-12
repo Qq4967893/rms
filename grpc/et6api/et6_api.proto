@@ -1,0 +1,1422 @@
+syntax = "proto3";
+package proto.et6api;
+option go_package = "./;et6api";
+
+service ApiService {
+
+  // account
+  rpc OpenAccount (OpenAccountRequest) returns (NullResponse) {
+  }
+  rpc UpdateAccount (UpdateAccountRequest) returns (CommonResponse) {
+  }
+  rpc GetAccountInfoSummary(LoginRequest) returns(GetAccountInfoSummaryResponse){
+  }
+  rpc GetAccountRealtimeData (GetAccountRealtimeDataRequest) returns (GetAccountRealtimeDataResponse) {
+  }
+  rpc ClearAccount (ClearAccountRequest)returns(NullResponse){
+  }
+  rpc GetAccountInfo (LoginRequest) returns (GetAccountInfoResponse) {
+  }
+  rpc GetTradeHistorySummary (LoginsRequest) returns (GetTradeHistorySummaryResponse) {
+  }
+  rpc GetUserEquity (LoginsRequest) returns (GetUserEquityResponse) {
+  }
+  rpc ModifyGroups (ModifyGroupsRequest) returns (ModifyGroupsResponse) {
+  }
+
+  rpc ModifyUserReadOnly (ModifyUserReadOnlyRequest) returns (NullResponse) {
+  }
+  rpc TradePay(TradePayRequest) returns (TradePayResponse) {
+  }
+  rpc ClearBalance(ClearBalanceRequest) returns(NullResponse){
+  }
+
+  // adminfee_white_label
+  rpc AddOrUpdateAdminfee (AddOrUpdateAdminfeeRequest) returns (CommonResponse) {
+  }
+  rpc GetAdminFee (GetAdminFeeRequest) returns (AdminfeeResponse) {
+  }
+  rpc GetWhiteLabelList (Null) returns (GetWhiteLabelListResponse) {
+  }
+
+  // cache
+  rpc GetSymbol (GetSymbolRequest) returns (GetSymbolResponse) {
+  }
+  rpc GetSession (SessionRequest) returns (GetSessionResponse) {
+  }
+
+  rpc GetSourceInfo (GetSourceRequest) returns (GetSourceInfoResponse) {
+  }
+  rpc GetHoliday(Null) returns (GetHolidayResponse){
+  }
+
+  rpc GetSpreadInfo (Null) returns (GetSpreadInfoResponse) {
+  }
+  rpc GetGroupSecurity (Null) returns (GetGroupSecurityResponse) {
+  }
+
+  // cfd_equity
+  rpc CfdOperate (CfdOperateRequest) returns (CfdOperateResponse) {
+  }
+  rpc GetStockSet (GetStockSetRequest) returns (GetStockSetResponse) {
+  }
+  rpc GetDividendInfoByTicket (GetDividendInfoByTicketRequest) returns (GetDividendInfoByTicketResponse) {
+  }
+
+  // copy
+  rpc Copy(CopyRequest) returns (NullResponse){
+  }
+  rpc UnCopy(UnCopyRequest) returns (UnCopyResponse){
+  }
+  rpc CopyAvailableBalance(CopyAvailableBalanceRequest) returns (CopyAvailableBalanceResponse){
+  }
+  rpc ModifyCopyOrderControl(ModifyCopyOrderControlRequest) returns (NullResponse){
+  }
+
+  // group
+  rpc GetGroupInfo (GetGroupInfoRequest) returns (GetGroupInfoResponse) {
+  }
+  rpc GetGroupSymbol (GetGroupSymbolRequest) returns (GetGroupSymbolResponse) {
+  }
+  // order
+  rpc GetTrade (GetTradeRequest) returns (GetTradeResponse) {
+  }
+  rpc CheckHavePosition (LoginRequest) returns (CheckHavePositionResponse) {
+  }
+  rpc ModifyOrderComment (ModifyOrderCommentRequest) returns (CommonResponse) {
+  }
+
+  // trade
+  rpc TradeOpen(TradeOpenRequest) returns (TradeResponse) {
+  }
+  rpc TradePending (TradePendingRequest) returns (TradeResponse) {
+  }
+  rpc ModifyTrade (ModifyTradeRequest) returns (TradeResponse) {
+  }
+  rpc TradeClose (TradeCloseRequest) returns (TradeResponse) {
+  }
+  rpc ModifyPending (ModifyPendingRequest) returns (TradeResponse) {
+  }
+  rpc TradeClosePending (TradeClosePendingRequest) returns (TradeResponse) {
+  }
+  rpc OperateTrade (OperateTradeRequest) returns (OperateTradeResponse) {
+  }
+  rpc TradeForcedClose (TradeForcedCloseRequest) returns (TradeForcedCloseResponse) {
+  }
+  rpc GetStopsLevel(Null) returns(GetStopsLevelInfoResponse){
+  }
+}
+
+// Copy
+// CopyRequest
+message CopyRequest {
+  int32 Login = 1;
+  int32 MasterLogin = 2;
+  double Amount = 3;
+  CommonRequest CReq =4;
+}
+// NullResponse
+
+
+// UnCopy
+// UnCopyRequest
+message UnCopyRequest {
+  int32 MasterLogin = 1;
+  oneof FIELD {
+    bool IsBatch = 2;
+    int32 Login = 3;
+  };
+  bool ForcedClose = 4;
+  CommonRequest CReq =5;
+}
+// UnCopyResponse
+message UnCopyResponse {
+  message ResponseData {
+    repeated Order Order = 1;
+  }
+  CommonResponse CResp = 1;
+  ResponseData Data  = 2;
+}
+
+// CopyAvailableBalance
+// CopyAvailableBalanceRequest
+message CopyAvailableBalanceRequest {
+  int32 Login = 1;
+  int32 MasterLogin = 2;
+  CommonRequest CReq =3;
+}
+// CopyAvailableBalanceResponse
+message CopyAvailableBalanceResponse {
+  double Data = 1;
+  CommonResponse CResp = 2;
+}
+
+// ModifyCopyOrderControl
+// ModifyCopyOrderControlRequest
+message ModifyCopyOrderControlRequest {
+  int64 SlaveTicket = 1;
+  //0 跟随 1 自主
+  int32 SlaveLogin = 2;
+  Control Control = 3;
+  CommonRequest CReq = 4;
+}
+enum Control {
+  SlaveControl = 0;
+  SelfControl = 1;
+}
+// NullResponse
+
+// TradePay
+// TradePayRequest
+message TradePayRequest {
+  int32 Login = 1;
+  double Price = 2;
+  string Comment = 3;
+  TradeClient Client = 4;
+  CommonRequest CReq =5;
+}
+
+    //ClearBalance
+// ClearBalanceRequest
+message ClearBalanceRequest {
+  int32 Login = 1;
+  TradeClient Client = 2;
+  CommonRequest CReq =3;
+}
+// TradePayResponse
+message TradePayResponse {
+  CommonResponse CResp = 1;
+  PaymentData Data = 2;
+}
+
+message PaymentData {
+  int64 Ticket = 1;
+  int32 Login = 2;
+  Cmd Cmd = 3;
+  double Profit = 4;
+  int64 CloseTime = 5;
+  string Comment = 6;
+}
+
+// GetTrade
+// GetTradeRequest
+message GetTradeRequest {
+  int32 Login = 1;
+  GetTradeType Type = 2;
+  string Tickets = 3;//Tickets有值的时候 GetTradeType/Offset/Limit 无效
+  int32 Offset = 4;
+  int32 Limit = 5;
+  CommonRequest CReq =6;
+}
+enum GetTradeType {
+  GTPending         = 0; //get pending order
+  GTOpen            = 1; //get open order
+  GTClose           = 2; //get close order
+  GTPendingAndOpen  = 3; //get pending and open order
+  GTAll = 4;//get all order
+  GTPayment = 5;// get all peyment record
+}
+// GetTradeResponse
+message GetTradeResponse {
+  message ResponseData {
+    int32 TradeCount = 1;
+    repeated Order Order = 2;
+  }
+  CommonResponse CResp = 1;
+  ResponseData Data  = 2;
+
+}
+
+// ClearBalance
+// LoginRequest
+// NullResponse
+
+// TradeForcedClose
+// TradeForcedCloseRequest
+message TradeForcedCloseRequest {
+  int32 Login = 1;
+  int64 ticket = 2;
+  CommonRequest CReq =3;
+}
+// TradeForcedCloseResponse
+message TradeForcedCloseResponse{
+  CommonResponse CResp = 1;
+  repeated Order Data = 2;
+}
+
+// CheckHavePosition
+// LoginRequest
+// CheckHavePositionResponse
+message CheckHavePositionResponse {
+  message ResponseData {
+    int32 Login = 1;
+    bool  HavePosition = 2;
+  }
+  CommonResponse CResp = 1;
+  ResponseData Data = 2;
+}
+
+// GetDividendInfoByTicket
+// GetDividendInfoByTicketRequest
+message GetDividendInfoByTicketRequest {
+  int64 Ticket = 1;
+  int32 Login = 2;
+  CommonRequest CReq =3;
+}
+// GetDividendInfoByTicketResponse
+message GetDividendInfoByTicketResponse {
+  CommonResponse CResp = 1;
+  repeated Dividend Data = 2;
+}
+
+message Dividend {
+  double Amount = 1;
+  int64 CreateAt = 2;
+  int32 Status = 3;
+  int32 DividendType = 4;
+  int32 SetId = 5;
+  int32 Login = 6;
+}
+
+// GetStockSet
+// GetStockSetRequest
+message GetStockSetRequest {
+  string Source = 1;
+  CommonRequest CReq =2;
+}
+// GetStockSetResponse
+message GetStockSetResponse {
+  CommonResponse CResp = 1;
+  repeated StockSet Data = 2;
+}
+
+message StockSet {
+  string Source = 1;
+  int32 Direction  = 2;
+  int32 Rate = 3;
+  int64 StopOutTime = 4;
+  int64 TakeEffectTime = 5;
+  int32 Status = 6;
+}
+
+
+// ClearAccount
+// ClearAccountRequest
+message ClearAccountRequest {
+  int32  login = 1;
+  CommonRequest CReq = 2;
+}
+// NullResponse
+message NullResponse {
+  CommonResponse CResp = 1;
+}
+
+// GetAccountInfo
+// LoginRequest
+message LoginRequest {
+  int32 Login = 1;
+  CommonRequest CReq =2;
+}
+
+// GetAccountInfoResponse
+message GetAccountInfoResponse {
+  message ResponseData {
+    int32 Login = 1;
+    string Name = 2;
+    string Phone =3;
+    string Group = 4;
+    string Comment  = 5;
+    double Balance  =6;
+    string  Description = 7;
+    string Currency  = 8;
+    EnableStatus  Status = 9 ;
+  }
+  CommonResponse CResp = 1;
+  ResponseData Data = 2;
+}
+
+// GetTradeHistorySummary
+// LoginsRequest
+message LoginsRequest {
+  string Logins = 1;
+  CommonRequest CReq =2;
+}
+// GetTradeHistorySummaryResponse
+message GetTradeHistorySummaryResponse {
+  message ResponseData {
+    double SumLot = 1;
+    double SumProfit = 2;
+    double SumDeposit  = 3;
+    int32 SumWinOrder = 4;
+    int32 SumClosedOrder = 5;
+    int32 SumPositionOrder = 6;
+    int32 SumPendingOrder = 7;
+  }
+  CommonResponse CResp = 1;
+  ResponseData Data = 2;
+}
+
+// GetUserEquity
+// LoginsRequest
+// GetUserEquityResponse
+message GetUserEquityResponse {
+  CommonResponse CResp = 1;
+  repeated EquityInfo Data = 2;
+}
+
+message EquityInfo {
+  int32 Login = 1;
+  double Margin = 2;
+  double MarginFree  = 3;
+  double Equity  = 4;
+  double Balance  = 5;
+  double MarginLevel = 6;
+}
+
+
+// ModifyGroups
+// ModifyGroupsRequest
+message ModifyGroupsRequest {
+  map<int32, ModifyGroupsData> UserGroup = 1;
+  CommonRequest CReq =2;
+}
+
+message ModifyGroupsData{
+  string NewGroupName = 1;
+  string OldGroupName = 2;
+}
+// ModifyGroupsResponse
+message ModifyGroupsResponse{
+  CommonResponse CResp = 1;
+  map<int32, int32> Data = 2;
+}
+// OpenAccount
+// OpenAccountRequest
+message OpenAccountRequest {
+  int32 Login = 1;
+  string Name = 2;
+  string Password = 3;
+  string Currency = 4;
+  optional  EnableStatus  Status = 5;
+  string Group = 6;
+  string Phone = 7;
+  string Email = 8;
+  string Comment = 9;
+  CommonRequest CReq =10;
+}
+// NullResponse
+
+
+// ModifyUserReadOnly
+// ModifyUserReadOnlyRequest
+message ModifyUserReadOnlyRequest {
+  int32 Login = 1;
+  bool IsReadOnly = 2;
+  CommonRequest CReq =3;
+}
+// NullResponse
+
+message UpdateAccountRequest {
+  RequestSourceEnum RequestSource = 1;
+  int32  Login = 2;
+  string Name = 3;
+  string Phone = 4;
+  string GroupName = 5;
+  EnableStatus  Status = 6;
+  string Description =7;
+}
+
+message ModifyOrderCommentRequest {
+  RequestSourceEnum RequestSource = 1;
+  int32 Login = 2;
+  int64 Ticket = 3;
+  string Comment = 4;
+}
+
+
+message GetAccountInfoSummaryResponse {
+  int32 StatusCode = 1;
+  string Msg = 2;
+  AccountSummaryInfo Data = 3;
+}
+
+message AccountSummaryInfo {
+  int64  AddTime = 1;
+  string Group = 2;
+  EnableStatus  Status = 3;
+  string Description = 4;
+  double Balance = 5;
+  double Equity = 6;
+  double UsedMargin = 7;
+  double FreeMargin = 8;
+  double Deposit = 9;
+  double Withdraw = 10;
+  double ClosedProfit = 11;
+  double PositionProfit = 12;
+  string Currency = 13;
+}
+
+message GetAccountRealtimeDataRequest {
+  RequestSourceEnum RequestSource = 1;
+  repeated int32 Login = 2;
+}
+
+message GetAccountRealtimeDataResponse {
+  int32 StatusCode = 1;
+  string Msg = 2;
+  repeated AccountRealtimeDataResult Data = 3;
+}
+
+message AccountRealtimeDataResult {
+  int32 StatusCode = 1;
+  string Msg = 2;
+  int32 Login = 3;
+  double Margin = 4;
+  double MarginFree = 5;
+  double MarginLevel = 6;
+  double Equity = 7;
+  double Balance = 8;
+}
+
+message ChangeGroupResult {
+  int32 StatusCode = 1;
+  string Msg = 2;
+  int32 Login = 3;
+}
+
+// Adminfee
+message GetAdminFeeRequest {
+  RequestSourceEnum RequestSource = 1;
+  int32 WhiteLabelID = 2;
+}
+
+message AdminfeeResponse {
+  int32 StatusCode = 1;
+  string Msg = 2;
+  map<int32, AdminfeeList> Data = 3;
+}
+
+message AdminfeeList {
+  repeated Adminfee Data = 1;
+}
+
+message Adminfee {
+  string Source=1;
+  int32  WhiteLabelID=2;
+  double FeeRate =3;
+}
+
+message AddOrUpdateAdminfeeRequest {
+  RequestSourceEnum RequestSource = 1;
+  string Source=2;
+  int32  WhiteLabelID=3;
+  double FeeRate =4;
+}
+
+message GetWhiteLabelListResponse {
+  int32 StatusCode = 1;
+  string Msg = 2;
+  repeated WhiteLabel Data = 3;
+}
+
+message WhiteLabel{
+  int32 WhiteLabelID=1;
+  string WhiteLabelName=2;
+}
+
+//cache
+message SessionsInfo {
+  map<int32, string> SessionInfo = 1;
+}
+
+message SymbolList {
+  repeated string Symbol = 1;
+}
+
+
+// CFD
+message CfdOperateRequest {
+  RequestSourceEnum RequestSource = 1;
+  int32 Login = 2;
+  int64 Ticket = 3;
+  CfdOperateType Type = 4;
+  double OpenClientPrice = 5;
+  double OpenServerPrice = 6;
+  double OpenOrderPrice = 7;
+  int32 Volume = 8;
+  double Tp = 9;
+  double Sl = 10;
+}
+
+message CfdOperateResponse {
+  int32 StatusCode = 1;
+  string Msg = 2;
+}
+
+// GetGroupInfo
+// GetGroupInfoRequest
+message GetGroupInfoRequest {
+  repeated string GroupNames = 1;
+  CommonRequest CReq =2;
+}
+// GetGroupInfoResponse
+message GetGroupInfoResponse {
+  CommonResponse CResp = 1;
+  repeated GetGroupInfoResponseGroupInfo Data = 2;
+}
+
+
+message GetGroupInfoResponseGroupInfo {
+  string GroupName = 1;
+  TradeType TradeType = 3;
+  double MarginStopOut = 4;
+  double MarginCallPrimary = 5;
+  double MarginCallSecondary = 6;
+  MarginMode MarginMode = 7;
+  int32 IsChargeSwap = 8;
+  map<string, ConGroupSec> SecGroups = 9;
+  WhiteLabel WhiteLabel = 10;
+}
+
+// GetSymbol
+// GetSymbolRequest
+message GetSymbolRequest {
+  string Symbol = 1;
+  enum SymbolLevelType {
+    All = 0;
+    AllNoLevel  = 1;
+  }
+  SymbolLevelType Type = 2 ;
+  CommonRequest CReq =3;
+}
+// GetSymbolResponse
+message GetSymbolResponse {
+  CommonResponse CResp = 1;
+  repeated SymbolInfo Data  = 2;
+}
+
+message SymbolInfo {
+  string Symbol = 1;
+  double LotMin = 2;
+  double LotMax = 3;
+  double LotStep = 4;
+  double CommBase = 5;
+  double SwapLong = 6;
+  double SwapShort = 7;
+  double SwapLongCharge = 8;
+  double SwapShortCharge = 9;
+  string Currency = 11;
+  int32 Digits = 12;
+  double Multiply = 13;
+  double MarginDivider = 14;
+  double MarginInitial = 15;
+  double MarginHedged = 16;
+  int32 MarginMode = 17;
+  int32 SwapRollover3days = 18;
+  int32 SwapType = 20;
+  int32 ProfitMode = 21;
+  double ContractSize = 22;
+  int32 StopLevel = 24;
+  string SecurityName = 25;
+  string ProfitCurrency= 26;
+  SourceType SourceType= 27;
+}
+
+// GetSession
+// SessionRequest
+message SessionRequest {
+  string Symbol = 1;
+
+  enum SessionType {
+    Quote = 0;
+    Trade  = 1;
+  }
+  SessionType Type = 2;
+  CommonRequest CReq =3;
+}
+// GetSessionResponse
+message GetSessionResponse {
+  CommonResponse CResp = 1;
+  map<string,SessionInfo>  Data  = 2;
+}
+message SessionInfo {
+  map<int32,string> Data=1;
+}
+
+message GetGroupSecurityResponse {
+  CommonResponse CResp = 1;
+  map<string,SecurityMap> Data = 2;
+}
+
+message SecurityMap{
+  map<string, SecurityInfo> Data =1;
+}
+message SecurityInfo {
+  int32 SpreadDiff = 4;
+  double CommBase = 5;
+}
+
+message GetSpreadInfoResponse {
+  message ResponseData {
+    map<string, SymbolList> SecuritySymbol = 1;
+    map<string, SecuritySpreadOffsetList> GroupSecuritySpreadOffset  = 2;
+  }
+  CommonResponse CResp = 1;
+  ResponseData Data = 2;
+}
+
+message SecuritySpreadOffsetList{
+  map<string, int32> Data  =1 ;
+}
+
+
+// GetGroupSymbol
+// GetGroupSymbolRequest
+message GetGroupSymbolRequest {
+  string Group = 1;
+  CommonRequest CReq =2;
+}
+// GetGroupSymbolResponse
+message GetGroupSymbolResponse {
+  CommonResponse CResp = 1;
+  map<string,SymbolSecurityMap> Data = 2;
+}
+
+message SymbolSecurityMap {
+  map<string, SymbolSecurityInfo> Data =1;
+}
+message SymbolSecurityInfo {
+  int32 SpreadDiff = 1;
+  double CommBase = 2;
+  map<string, int32> Data =3;
+}
+
+//group
+
+
+message GetGroupNameResponse {
+  int32 StatusCode = 1;
+  string Msg = 2;
+  repeated GroupNameInfo Data = 3;
+}
+
+message GroupNameInfo {
+  string GroupName = 1;
+}
+
+message AddGroupInfoRequest {
+  RequestSourceEnum RequestSource = 1;
+  string GroupName = 2;
+  TradeType TradeType = 3;
+  double MarginStopOut = 4;
+  double MarginCallPrimary = 5;
+  double MarginCallSecondary = 6;
+  MarginMode MarginMode = 7;
+  int32 IsChargeSwap = 8;
+  string Comment = 9;
+  int32 WhiteLabelID = 10;
+}
+
+message UpdateGroupInfoRequest {
+  RequestSourceEnum RequestSource = 1;
+  string GroupName = 2;
+  TradeType TradeType = 3;
+  double MarginStopOut = 4;
+  double MarginCallPrimary = 5;
+  double MarginCallSecondary = 6;
+  MarginMode MarginMode = 7;
+  int32 IsChargeSwap = 8;
+  string Comment = 9;
+  int32 WhiteLabelID = 10;
+}
+
+message DeleteGroupInfoRequest {
+  RequestSourceEnum RequestSource = 1;
+  string GroupName = 2;
+}
+
+message GetSecurityInfoRequest {
+  RequestSourceEnum RequestSource = 1;
+  string GroupName = 2;
+}
+
+message GetSecurityInfoResponseForEtc {
+  int32 StatusCode = 1;
+  string Msg = 2;
+  repeated ConGroupSec Data = 3;
+}
+
+message UpdateSecurityInfoRequest {
+  RequestSourceEnum RequestSource = 1;
+  string Symbol = 2;
+  string GroupName = 3;
+  int32 SpreadDiff = 4;
+  double Commission = 5;
+}
+
+message UpdateSecurityStatusRequest {
+  RequestSourceEnum RequestSource = 1;
+  string Symbol = 2;
+  string GroupName = 3;
+  EnableStatus Status = 4;
+}
+
+//source
+message UpdateSourceSwapRequest {
+  RequestSourceEnum RequestSource = 1;
+  string Source = 2;
+  float SwapLong = 3;
+  float SwapShort = 4;
+}
+
+message MarketDSTResponse {
+  int32 StatusCode=1;
+  string Msg=2;
+  map<string,DSTType> Data=3;
+}
+
+message DSTSwitchRequest {
+  RequestSourceEnum RequestSource = 1;
+  MarketType MarketOwnerType = 2;
+  DSTType Type=3;
+}
+
+message GetSourceInfoResponse {
+  int32 StatusCode = 1;
+  string Msg = 2;
+  repeated SourceInfo Data = 3;
+}
+
+message SourceInfo {
+  string Source = 1;
+  string SourceCN = 2;
+  SourceType SourceType= 3;
+  int32 SwapType=4;
+  double SwapLongCharge = 5;
+  double SwapShortCharge = 6;
+  double SwapLong = 7;
+  double SwapShort = 8;
+  double LotMin = 9;
+  double LotMax = 10;
+  double LotStep = 11;
+  int32 MarginMode=12;
+  string Currency =13;
+  string ProfitCurrency = 15;
+  int32 ContractSize = 16;
+  int32 Digits = 17;
+  int32 StopsLevel = 18;
+  int32 Swap3Day = 19;
+  MarketType MarketOwnerType =20;
+  DSTType     DSTType=21;
+  map<int32, DstInfos> TradeSession = 22;
+  map<int32, DstInfos> QuoteSession = 23;
+}
+
+message DstInfos{
+  map<int32,SessionInfos> Data=1;
+}
+
+message SessionInfos {
+  repeated string TimeSpans = 1;
+}
+
+message GetSourceNameListResponse {
+  int32 StatusCode = 1;
+  string Msg = 2;
+  repeated string Data = 3;
+}
+
+message GetSourceRequest {
+  RequestSourceEnum RequestSource = 1;
+  bool IsGetAll=2;
+  SourceType SourceType=3;
+}
+
+message UpdateSourceInfoRequest {
+  RequestSourceEnum RequestSource = 1;
+  string Source = 2;
+  SourceType SourceType=3;
+  int32 SwapType= 4;
+  double SwapLong = 5;
+  double SwapShort = 6;
+  int32 MarginMode= 7;
+  string Currency = 8;
+  string ProfitCurrency = 10;
+  int32 ContractSize = 11;
+  int32 Digits = 12;
+  int32 StopsLevel = 13;
+  int32 Swap3Day = 14;
+  MarketType MarketOwnerType =15;
+  map<int32, DstInfos> TradeSession = 16;
+  map<int32, DstInfos> QuoteSession = 17;
+  double LotMin = 19;
+  double LotMax = 20;
+  double LotStep = 21;
+}
+
+message AddSymbolInfoRequest {
+  RequestSourceEnum RequestSource = 1;
+  string Symbol = 2;
+  string Source = 3;
+  int32  Leverage = 4;
+  EnableStatus Status = 5;
+}
+
+message UpdateSymbolInfoRequest {
+  RequestSourceEnum RequestSource = 1;
+  string Symbol = 2;
+  string Source = 3;
+  int32  Leverage = 4;
+  EnableStatus Status = 6;
+}
+
+message DeleteSymbolRequest {
+  RequestSourceEnum RequestSource = 1;
+  string Symbol = 2;
+}
+
+message GetHolidayResponse {
+  int32 StatusCode = 1;
+  string Msg = 2;
+  repeated HolidayInfo Data = 3;
+}
+
+message HolidayInfo {
+  int32 Id = 1;
+  bool Enable = 2;
+  string Date = 3;
+  string From = 4;
+  string To = 5;
+  string Symbol = 6;
+  string Description = 7;
+}
+
+message AddHolidayRequest {
+  RequestSourceEnum RequestSource = 1;
+  bool Enable = 2;
+  string Date = 3;
+  string From = 4;
+  string To = 5;
+  string Symbol = 6;
+  string Description = 7;
+}
+
+message UpdateHolidayRequest {
+  RequestSourceEnum RequestSource = 1;
+  int32 Id = 2;
+  bool Enable = 3;
+  string Date = 4;
+  string From = 5;
+  string To = 6;
+  string Symbol = 7;
+  string Description = 8;
+}
+
+message DeleteHolidayRequest {
+  RequestSourceEnum RequestSource = 1;
+  int32 Id = 2;
+}
+
+message CommonRequest {
+  string PHPHost = 1;
+  string RequestID = 2;
+  int64  PHPTime = 3;
+}
+
+
+message TradeResponse {
+  CommonResponse CResp = 1;
+  Order Data = 2;
+}
+
+message Order {
+  int64 Ticket = 1;
+  int32 Login = 2;
+  string Symbol = 3;
+  Cmd Cmd = 4;
+  int32 Volume = 5;
+  double SL = 6;
+  double TP = 7;
+  TradeClient OpenClient = 8;
+  double OpenPrice = 9;
+  int64 OpenTime = 10;
+  TradeClient CloseClient = 11;
+  double ClosePrice = 12;
+  int64 CloseTime = 13;
+  int32 Digits = 14;
+  int64 Expiration = 15;
+  double Profit = 16;
+  double Commission = 17;
+  double Swap = 18;
+  double AdminFee = 19;
+  double Margin = 20;
+  double MarginRate = 21;
+  string Comment = 22;
+  int32 StopsLevel = 23;
+  double Multiply = 24;
+  string ProfitCurrency = 25;
+  double UsdRate = 26;
+  double GbpRate = 27;
+  Type Type = 28;
+  int32 Reason = 29;
+  string DepositCurrency = 30;
+  string RequestId = 31;
+  int64 ModifyTime = 32;
+  string Source  = 33;
+  int32 Leverage = 34;
+  double ProfitRate = 35;
+}
+
+// ModifyPending req
+// ModifyPendingRequest
+message ModifyPendingRequest {
+  int32 Login = 1;
+  int64 Ticket = 2;
+  double PendingPrice = 3;
+  double Tp = 4;
+  double Sl = 5;
+  int64 Expiration = 6;
+  CommonRequest CReq =8;
+}
+// ModifyPending resp
+// TradeResponse
+
+// ModifyTrade req
+// ModifyTradeRequest
+message ModifyTradeRequest {
+  int32 Login = 1;
+  int64 Ticket = 2;
+  double Tp = 3;
+  double Sl = 4;
+  CommonRequest CReq =6;
+}
+// ModifyTrade resp
+// TradeResponse
+
+// TradeClose req
+// TradeCloseRequest
+message TradeCloseRequest {
+  int64 Ticket = 1;
+  int32 Login = 2;
+  int32 Volume = 3;
+  TradeClient Client = 4;
+  optional double ClientPrice = 5;
+  optional int64 ClientTime = 6;
+  CommonRequest CReq =7;
+}
+// TradeClose resp
+// TradeResponse
+
+// TradeOpen req
+// TradeOpenRequest
+message TradeOpenRequest {
+  int32 Login = 1;
+  string ClientCountry = 2;
+  Cmd Cmd = 3;
+  int32 Volume = 4;
+  double Tp = 5;
+  double Sl = 6;
+  TradeClient Client = 7;
+  optional double ClientPrice = 8;
+  optional int64 ClientTime = 9;
+  CommonRequest CReq =10;
+  string Source  = 11;
+  int32 Leverage = 12;
+  string ClientIp = 13;
+}
+// TradeOpen resp
+// TradeResponse
+
+message TradePendingRequest {
+  int32 Login = 1;
+  string ClientCountry = 2;
+  int32 Volume = 3;
+  double PendingPrice = 4;
+  Cmd Cmd = 5;
+  double Tp = 6;
+  double Sl = 7;
+  int64 Expiration = 8;
+  TradeClient Client = 9;
+  CommonRequest CReq =10;
+  string Source  = 11;
+  int32 Leverage = 12;
+  string ClientIp = 13;
+}
+
+// TradeClosePending req
+// TradeClosePendingRequest
+message TradeClosePendingRequest {
+  int64 Ticket = 1;
+  int32 Login = 2;
+  TradeClient Client = 3;
+  CommonRequest CReq =4;
+}
+// TradeClosePending resp
+// TradeResponse
+
+//OperateTrade+++
+//Request
+message OperateTradeRequest {
+  RequestSourceEnum RequestSource = 1;
+  Type Type = 2;
+  int32 Login = 3;
+  int64 Ticket = 4; //Order Ticket Num
+  Cmd Cmd = 5;
+  string Source = 6; //Source Name
+  int32 Leverage = 7;
+  int32 Volume = 8;
+  double Tp = 9; //decimal.Decimal Take Profit Price to Set
+  double Sl = 10; //decimal.Decimal Stop Loss Price to Set
+  double ClientPrice = 11; //decimal.Decimal Client Price when Request
+  int64 ClientTime = 12; //Standard UNIX Timestamp when Request
+  double PendingPrice = 13;
+  int64 Expiration = 14;
+  double Amount = 15;
+  string Comment = 16;
+  TradeClient Client = 17;
+}
+
+//Response
+message OperateTradeResponse {
+  int32 StatusCode = 1;
+  string Msg = 2;
+  repeated TradeOrderReply Data = 3;
+}
+
+message TradeOrderReply {
+  string RequestId = 1;
+  Type Type = 2;
+  int64 ModifyTime = 3;
+  int64 Ticket = 4;
+  int32 Login = 5;
+  string Symbol = 6;
+  Cmd Cmd = 7;
+  int32 Volume = 8;
+  double OpenPrice = 9;
+  double ClosePrice = 10;
+  TradeClient OpenClient = 11;
+  TradeClient CloseClient = 12;
+  int64 OpenTime = 13;
+  int64 CloseTime = 14;
+  double Sl = 15;
+  double Tp = 16;
+  string Comment = 17;
+  int64 Expiration = 18;
+  double Commission = 19;
+  double Swap = 20;
+  double Profit = 21;
+  double Margin = 22;
+  double MarginRate = 23;
+  bool DeleteFlag = 24;
+  int32 Reason = 25;
+  int32 Digits = 26;
+  double Adminfee = 27;
+  string DepositCurrency = 28;
+  double UsdRate = 29;
+  double GbpRate = 30;
+  string Source  = 31;
+  int32 Leverage = 32;
+  double ProfitRate = 33;
+}
+
+message GetStopsLevelInfoResponse {
+  int32 StatusCode = 1;
+  string Msg = 2;
+  map<string, StopsLevelInfo> Data = 3;
+}
+
+message StopsLevelInfo {
+  string SourceName = 1;
+  int32 StopsLevel = 2;
+}
+
+
+
+enum Ret {
+  RetOK = 0;
+  RetOKNone = 1;
+  RetError = 2;
+  RetInvalidData = 3;
+  RetTechProblem = 4;
+  RetOldVersion = 5;
+  RetNoConnect = 6;
+  RetNotEnoughRights = 7;
+  RetTooFrequent = 8;
+  RetMalfunction = 9;
+  RetGenerateKey = 10;
+  RetSecuritySession = 11;
+  RetAccountDisabled = 64;
+  RetBadAccountInfo = 65;
+  RetPublicKeyMissing = 66;
+  RetTradeTimeout = 128;
+  RetTradeBadPrices = 129;
+  RetTradeBadStops = 130;
+  RetTradeBadVolume = 131;
+  RetTradeMarketClosed = 132;
+  RetTradeDisable = 133;
+  RetTradeNoMoney = 134;
+  RetTradePriceChanged = 135;
+  RetTradeOffquotes = 136;
+  RetTradeBrokerBusy = 137;
+  RetTradeRequote = 138;
+  RetTradeOrderLocked = 139;
+  RetTradeLongOnly = 140;
+  RetTradeTooManyReq = 141;
+  RetTradeAccepted = 142;
+  RetTradeProcess = 143;
+  RetTradeUserCancel = 144;
+  RetTradeModifyDenied = 145;
+  RetTradeContextBusy = 146;
+  RetTradeExpirationDenied = 147;
+  RetTradeTooManyOrders = 148;
+  RetTradeHedgeProhibited = 149;
+  RetTradeProhibitedByFIFO = 150;
+  RetTradeEndOfDay = 151;
+
+  MarginNotEnough           = 1025;
+  ErrorParameter            = 2000;
+  ReadQuote                 = 2001;
+  MarketClosed              = 2002;
+  MarketLiquidityNotEnough  = 2003;
+  TPSLPointsInvalid         = 2004;
+  OrderClosed               = 2005;
+  OrderTypeError            = 2006;
+  SLPriceInvalid            = 2007;
+  TPPriceInvalid            = 2008;
+  TPSLPriceInvalid          = 2009;
+  AccountNotExist           = 2010;
+  ModifyAgentAccountFaied   = 2011;
+  SystemTemporaryError      = 2012;
+  ModifyNameFailure         = 2013;
+  NameEmpty                 = 2014;
+  PwdCorrect                = 2015;
+  AccountError              = 2016;
+  PwdError                  = 2017;
+  NoneOpenAccountBonus      = 2018;
+  MoreOpenAccountBonus      = 2019;
+  AlreayRealIn              = 2020;
+  NoMarketPrice             = 2021;
+  NoPrice                   = 2022;
+  ErrClearPosition          = 2023;
+  ErrClearCredit            = 2024;
+  ErrGetEquity              = 2025;
+  ErrClearBalance           = 2026;
+  ClearBonusOk              = 2027;
+  NoPayNoCopy               = 2028;
+  UnableCopy                = 2029;
+  CopyAmountSmall           = 2030;
+  BalanceNotEnough          = 2031;
+  CopyAmountNotEnough       = 2032;
+  //ModifyFollowSucc              = 2033;
+  PayCreditFailure              = 2034;
+  GetSymbolError                = 2035;
+  GetOneSymbolInfoError         = 2036;
+  GetOneSymbolParamError        = 2037;
+  GetSymbolInfoError            = 2038;
+  GetSymbolGroupError           = 2039;
+  TicketError                   = 2040;
+  NotWhiteLableAccount          = 2041;
+  AccountNotManager             = 2042;
+  GetGroupConfigError           = 2043;
+  GroupLogicError1              = 2044;
+  GroupLogicError2              = 2045;
+  GroupLogicError3              = 2046;
+  GroupLogicError4              = 2047;
+  GroupLogicError5              = 2048;
+  GroupLogicError6              = 2049;
+  CopyNotMakeKiddo              = 2050;
+  CopyCountAlreadyMax           = 2051;
+  AccountReadonly               = 2052;
+  LeverageError                 = 2053;
+  VolumeErrorForCFD             = 2054;
+  VolumeErrorForXNG             = 2055;
+  VolumeErrorForEnergy          = 2056;
+  VolumeErrorForForex           = 2057;
+  PendingPriceError             = 2058;
+  PendingTypeError              = 2059;
+  PendingExpirationError        = 2060;
+  TradeModifyError              = 2061;
+  PendingModifyExpirationError  = 2062;
+  NotPendingOrder               = 2063;
+  PendingOrderHasDeleted        = 2064;
+  SetUserReadonlyError          = 2065;
+  SetUserReadonlyFailed         = 2066;
+  ContactManager                = 2067;
+  RequestFailed                 = 2068;
+  ServiceNameError              = 2069;
+  NoResponse                    = 2070;
+  NotMaster                     = 2071;
+  VolumeErrorForCryptos         = 2072;
+  VolumeErrorForEquity          = 2073;
+  TradeCloseTimeLimit           = 2074;
+  ErrCurrentGroupNotMatch           = 2075;
+  TradePriceTimeOut             = 2076;
+  SymbolNoTrade                 = 2077;
+  SymbolSecurityNoTrade         = 2078;
+  DBErr  = 5000;
+}
+
+enum Cmd {
+  OPBuy = 0;
+  OPSell = 1;
+  OPBuyLimit = 2;
+  OPSellLimit = 3;
+  OPBuyStop = 4;
+  OPSellStop = 5;
+  OPBalance = 6;
+  OPCredit = 7;
+}
+
+enum TradeClient {
+   Default = 0;
+   App = 1;
+   Web = 2;
+   Etc = 3;
+   Sys = 4;
+}
+
+enum Type {
+  TTOrderMKOpen = 0; //open order (Market Execution)
+  TTOrderMKClose = 1; //close order (Market Execution)
+  TTOrderMKModify = 2; //modify order
+  TTOrderMKCloseBy = 3; //close order by order
+  TTOrderMKCloseAll = 4; //close all orders by symbol
+  TTOrderPDCreate = 5; //create pending order
+  TTOrderPDModify = 6; //modify order
+  TTOrderPDDelete = 7; //delete pending order
+  TTOrderPDExpiration = 8; //create pending order with expiration
+  TTBRBalance = 9; //balance
+  TTBRActivateSL = 10; //activate stop loss close
+  TTBRActivateTP = 11; //activate take profit close
+  TTBRActivateSO = 12; //activate stop out close
+  TTBRActivatePD = 13; //activate pending order open
+  TTOrderMKClosePartial = 14; //partial close
+  TTOrderDelete = 15; //delete order; execute condition:CloseOrderTime>0
+  TTBRClosePartial = 16; // partial close at no trade time
+  TTBRClose = 17; // close at no trade time
+  TTBRMKModify = 18 ; // system modify order
+}
+
+//enum GetOrderType {
+//  GTPending = 0;//get pending order
+//  GTOpen = 1;//get open order
+//  GTClose = 2;//get close order
+//  GTPendingAndOpen = 3; //get pending and open order
+//  GTAll = 4;//get all order
+//  GTPayment = 5;// get all peyment record
+//}
+
+
+message CommonResponse {
+  bool IsSucc = 1;
+  string ErrorMsg = 2;
+  int32 ErrorCode = 3;
+}
+
+message Null {
+  CommonRequest CReq =1;
+}
+
+//Source
+enum SourceType {
+  FX = 0;
+  Gold = 1;
+  Sliver = 2;
+  Gas = 3;
+  Oil = 4;
+  Index = 5;
+  Crypto = 6;
+  EquityCFD = 7;
+}
+
+enum MarginFormulaType {
+  Forex = 0;
+  CFD = 1;
+  Futures = 2;
+  CFDIndex = 3;
+  CFDLeverage = 4;
+}
+
+enum SwapFormulaType {
+  ByPoints = 0;
+  ByMoney = 1;
+  ByInterest = 2;
+  ByMoneyInMarginCurrency = 3;
+  ByInterestOfCfds = 4;
+  ByInterestOfFutures=5;
+}
+
+enum SwapWeekday {
+  Sunday = 0;
+  Monday = 1;
+  Tuesday = 2;
+  Wednesday = 3;
+  Thursday = 4;
+  Friday = 5;
+  Saturday = 6;
+}
+
+enum MarketType {
+  NewYork = 0;
+  London = 1;
+  Sydney = 2;
+  HK = 3;
+  MarketTypeEnd=4;
+}
+
+enum DSTType {
+  DST = 0;
+  NonDST = 1;
+  None = 2;
+  DSTTypeEnd = 3;
+}
+
+enum CatagoryType {
+  All = 0;
+  Securities = 1;
+  Symbol = 2;
+  Source = 3;
+}
+
+//Group
+
+enum TradeType {
+  Test = 0;
+  ABook = 1;
+  BBook = 2;
+}
+
+enum MarginMode {
+  DoubleLeg = 0;
+  LargerLeg = 1;
+  NetLeg = 2;
+}
+
+enum EnableStatus {
+  UnKnown = 0;
+  QuoteOnly = 1;
+  FullTrade = 2;
+  Disable = 3;
+}
+
+message ConGroupSec {
+  string Symbol = 1;
+  string GroupName = 2;
+  int32 SpreadDiff = 3;
+  double Commission = 4;
+  EnableStatus Status = 5;
+  string Source = 6;
+}
+
+enum RequestSourceEnum {
+  //NoChangeWhiteLabelID = -1;
+  None_Source = 0;
+  TSP = 1;
+  ETC = 2;
+  ZMQ = 3;
+}
+//CFD
+enum CfdOperateType {
+  Split = 0;
+  Consolidate = 1;
+}

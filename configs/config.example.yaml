@@ -1,0 +1,123 @@
+log:
+  # 日志级别，常用值有: "debug"、"info"、"warn"、"error"
+  level: "info"
+  # 为 true 时日志同时输出到终端和文件；为 false 时仅写入日志文件
+  stdout: true
+  fileName: "./gin/gin.log"
+  accessFolder: "./access/access.log"
+  timeFormat: "2006-01-02T15:04:05.999Z07:00"
+  # 为 true 时轮转后的历史日志会压缩为 .gz；当前日志文件不会被压缩
+  compress: false
+  maxSize: 100
+  maxBackup: 30
+  maxAge: 60
+sentry:
+  dsn: ""
+  enableTracing: false
+  tracesSampleRate: 1
+jwt:
+  secretKey: "replace-with-your-jwt-secret"
+  expireTime: 20
+  maxRefreshTime: 43200
+mysql:
+  api:
+    username: "your_mysql_username"
+    password: "your_mysql_password"
+    host: "127.0.0.1:3306"
+    database: "tiger"
+    maxOpenConns: 20
+    maxIdleConns: 10
+    maxLifetime: 60
+  rms:
+    username: "your_mysql_username"
+    password: "your_mysql_password"
+    host: "127.0.0.1:3306"
+    database: "rms"
+    maxOpenConns: 20
+    maxIdleConns: 10
+    maxLifetime: 60
+  crm:
+    username: "your_mysql_username"
+    password: "your_mysql_password"
+    host: "127.0.0.1:3306"
+    database: "crm"
+    maxOpenConns: 20
+    maxIdleConns: 10
+    maxLifetime: 60
+  et6:
+    username: "your_mysql_username"
+    password: "your_mysql_password"
+    host: "127.0.0.1:3306"
+    database: "trading_system_user"
+    maxOpenConns: 20
+    maxIdleConns: 10
+    maxLifetime: 60
+  et6Config:
+    username: "your_mysql_username"
+    password: "your_mysql_password"
+    host: "127.0.0.1:3306"
+    database: "trading_system_config"
+    maxOpenConns: 20
+    maxIdleConns: 10
+    maxLifetime: 60
+  chart:
+    username: "your_mysql_username"
+    password: "your_mysql_password"
+    host: "127.0.0.1:3306"
+    database: "ets_chart"
+    maxOpenConns: 20
+    maxIdleConns: 10
+    maxLifetime: 60
+  etc:
+    username: "your_mysql_username"
+    password: "your_mysql_password"
+    host: "127.0.0.1:3306"
+    database: "etc"
+    maxOpenConns: 20
+    maxIdleConns: 10
+    maxLifetime: 60
+redis:
+  base:
+    host: "127.0.0.1:6379"
+    password: ""
+    db: 0
+  rms:
+    host: "127.0.0.1:6379"
+    password: ""
+    db: 3
+  quote:
+    host: "127.0.0.1:6379"
+    password: ""
+    db: 15
+  position:
+    host: "127.0.0.1:6379"
+    password: ""
+    db: 0
+mongo:
+  tick:
+    # 支持多个 Mongo 节点，使用逗号分隔，例如: "127.0.0.1:27017,127.0.0.2:27017"
+    host: "127.0.0.1:27017"
+    username: "your_mongo_username"
+    password: "your_mongo_password"
+    database: "ets_ticks"
+grpc:
+  tsp:
+    address: "127.0.0.1:6001"
+    timeout: "6s"
+kafka:
+  # 支持多个 Kafka broker，使用逗号分隔，例如: "127.0.0.1:9092,127.0.0.2:9092"
+  addr: "127.0.0.1:9092"
+  topic:
+    order: "ets-order"
+    group: "ets-usergroup"
+  consumer: "rms-group-local"
+email:
+  emailDriver: "brevo"
+  apiKey: "replace-with-your-email-api-key"
+  apiUser: ""
+  apiUserBatch: ""
+  from: "noreply@example.com"
+  fromBatch: "batch@example.com"
+  fromName: "Example App"
+  # 支持多个邮箱，使用分号分隔，例如: "dev1@example.com;dev2@example.com"
+  developerEmail: "developer@example.com"
